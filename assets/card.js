@@ -31,12 +31,13 @@
   const f = d => d.toLocaleDateString("es-CO", { day: "numeric", month: "long" });
   const vigencia = C.sorteo ? `Sorteo el ${f(ultimo)}` : `Del ${f(inicio)} al ${f(ultimo)} (${D.duracionDias} días)`;
 
-  const saludo = fmt
-    ? (C.cumple ? `🎂 ${esc(fmt)} 🎂` : `Hola, ${esc(fmt)} 💖`)
-    : (C.cumple ? "🎂 Para mi clienta preferida 🎂" : "Para mi clienta preferida 💖");
+  const em = C.cumple ? "🎂" : C.ganadora ? "🏆" : "";
+  const saludo = em
+    ? `${em} ${fmt ? esc(fmt) : "Para mi clienta preferida"} ${em}`
+    : (fmt ? `Hola, ${esc(fmt)} 💖` : "Para mi clienta preferida 💖");
 
   document.documentElement.dataset.tema = C.tema;
-  if (C.regalo) document.documentElement.dataset.regalo = "1";
+  if (C.regalo || C.ganadora) document.documentElement.dataset.regalo = "1";
   document.title = `${C.titulo} · ${D.nombre}`;
 
   const waMsg = encodeURIComponent(`Hola ${D.nombre} 💖 ${fmt ? "soy " + fmt + ", " : ""}${C.waMensaje}`);
@@ -55,6 +56,8 @@
   const heroExtra = R
     ? `<button class="gift" id="gift" aria-label="Abrir regalo"><span class="box">${R.icono || "🎁"}</span><small>${esc(R.hint || "Toca para abrir tu regalo")}</small></button>
        <div class="prize" id="prize"><h3>${esc(R.titulo)}</h3><p>${esc(R.detalle)}</p></div>`
+    : C.ganadora
+    ? `<div class="prize show" id="prize"><div class="trofeo">🏆</div><h3>${esc(C.premioTitulo)}</h3><p>${esc(C.premioDetalle)}</p></div>`
     : `<button class="badge badge-btn" id="sorteoBtn"><span>${esc(C.badge)}</span><small>${esc(C.hint || "toca para ver más 👆")}</small></button>`;
 
   document.body.innerHTML = `
@@ -68,7 +71,7 @@
     <h1>${esc(C.titulo)}</h1>
     <p class="sub">${esc(C.subtitulo)}</p>
     ${heroExtra}
-    ${R ? `<a class="btn late" id="verDetalle" href="#detalle" style="display:none">Ver detalles</a>` : ""}
+    ${R ? `<a class="btn late" id="verDetalle" href="#detalle" style="display:none">Ver detalles</a>` : C.ganadora ? `<a class="btn" href="#detalle">Ver detalles</a>` : ""}
     <div class="scroll-hint">desliza ↓</div>
   </header>
 
@@ -124,7 +127,7 @@
   /* efectos de fondo */
   const pet = document.getElementById("petals");
   const rnd = (a, b) => a + Math.random() * (b - a);
-  if (C.cumple) {
+  if (C.cumple || C.ganadora) {
     pet.classList.add("party");
     for (let i = 0; i < 14; i++) {                       // globos subiendo
       const e = document.createElement("span");
@@ -180,6 +183,30 @@
     let last = 0;
     addEventListener("pointermove", e => { const n = Date.now(); if (n - last < 70) return; last = n; spark(e.clientX, e.clientY, SP, rnd(-20, 20), rnd(10, 40)); });
     addEventListener("pointerdown", e => { for (let i = 0; i < 10; i++) spark(e.clientX, e.clientY, SP, rnd(-70, 70), rnd(-70, 70)); });
+  }
+
+  /* ganadora: lluvia de confeti al abrir y al tocar el premio */
+  if (C.ganadora) {
+    const hero = document.querySelector(".hero"), prize = document.getElementById("prize");
+    const lluvia = () => {
+      const set = ["🏆", "🎉", "✨", "🎊", "💖", "⭐"];
+      const h = hero.getBoundingClientRect(), p = prize.getBoundingClientRect();
+      const cx = p.left - h.left + p.width / 2, cy = p.top - h.top + p.height / 2;   // centro de la tarjeta del premio
+      for (let i = 0; i < 50; i++) {
+        const c = document.createElement("span");
+        c.className = "confetti behind"; c.textContent = set[i % 6];
+        c.style.left = cx + (Math.random() - .5) * p.width * .7 + "px";
+        c.style.top = cy + (Math.random() - .5) * p.height * .5 + "px";
+        const ang = Math.random() * Math.PI * 2, dist = 30 + Math.random() * 45;
+        c.style.setProperty("--x", Math.cos(ang) * dist * 1.3 + "vw");
+        c.style.setProperty("--y", Math.sin(ang) * dist * .9 + "vh");
+        c.style.animationDelay = Math.random() * .3 + "s";
+        hero.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
+      }
+    };
+    for (let w = 0; w < 5; w++) setTimeout(lluvia, 500 + w * 1100);
+    prize.onclick = lluvia;
   }
 
   /* regalo / pastel + confeti */
