@@ -1,0 +1,134 @@
+:root{--a:#ff5fa2;--b:#b983ff;--soft:#ff9acb;--bg1:#fff4f9;--bg2:#f3e6ff;--bg3:#ffe6f1;--texto:#3a2a22}
+:root[data-tema="cumple"]{--a:#ff4d8d;--b:#7c5cff;--soft:#ffd166;--bg1:#fff6e0;--bg2:#ffe8f3;--bg3:#e8f0ff}
+:root[data-tema="dorado"]{--a:#d4a017;--b:#ff7eb3;--soft:#f3cf6b;--bg1:#fffaf0;--bg2:#fff0f6;--bg3:#fff3d6}
+:root[data-tema="lila"]{--a:#9b5de5;--b:#f15bb5;--soft:#c9a6ff;--bg1:#f8f2ff;--bg2:#ffeaf6;--bg3:#efe3ff}
+:root[data-tema="coral"]{--a:#ff6b6b;--b:#ffa94d;--soft:#ffb3a7;--bg1:#fff5f2;--bg2:#fff0e3;--bg3:#ffe3e3}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;color:var(--texto);background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,var(--bg3));overflow-x:hidden}
+h1,h2,h3,.logo-text{font-family:'Playfair Display',serif}
+
+.petals{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.petals span{position:absolute;top:-40px;opacity:.7;animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg) translateX(40px)}}
+section,header,footer{position:relative;z-index:1}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;gap:14px}
+.logo-wrap img{width:160px;height:160px;object-fit:cover;border-radius:32px;background:#2e2723;border:3px solid #c9a24b;box-shadow:0 10px 40px color-mix(in srgb,var(--a) 35%,transparent);animation:pop 1s cubic-bezier(.2,1.4,.4,1) both,float 4s 1s ease-in-out infinite}
+.logo-text{font-size:2rem;color:var(--a);animation:pop 1s both}
+.hola{font-size:1.4rem;font-weight:600;color:var(--a);animation:up .8s .2s both}
+.eyebrow{letter-spacing:.35em;text-transform:uppercase;font-size:.75rem;color:var(--b);animation:up .8s .3s both}
+h1{font-size:clamp(2.6rem,9vw,5rem);line-height:1.25;padding:.12em .08em;background:linear-gradient(90deg,var(--a),var(--b),var(--a));background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:up .8s .45s both,shine 5s linear infinite}
+.sub{max-width:460px;font-weight:300;animation:up .8s .6s both}
+.badge{margin:10px 0;padding:18px 40px;border-radius:999px;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;font-size:2.2rem;font-weight:600;box-shadow:0 12px 35px color-mix(in srgb,var(--a) 40%,transparent);animation:up .8s .75s both,pulse 2s 1.6s infinite}
+.btn{display:inline-block;padding:14px 30px;border-radius:999px;background:var(--a);color:#fff;text-decoration:none;border:2px solid var(--a);cursor:pointer;font:inherit;font-weight:600;transition:.3s;animation:up .8s .9s both}
+.btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 10px 25px color-mix(in srgb,var(--a) 40%,transparent)}
+.btn.ghost{background:transparent;color:var(--a)}
+.btn.ghost:hover{background:var(--a);color:#fff}
+.scroll-hint{margin-top:20px;font-size:.8rem;opacity:.6;animation:bounce 1.6s infinite}
+
+.gift{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font:inherit;color:var(--texto);animation:up .8s .75s both}
+.gift .box{font-size:5rem;display:block;animation:wiggle 1.6s infinite}
+.gift small{opacity:.9;font-weight:700;font-size:.95rem}
+.gift.open{display:none}
+.prize{display:none;background:#fff;border-radius:24px;padding:24px 30px;box-shadow:0 12px 35px color-mix(in srgb,var(--a) 30%,transparent);max-width:380px}
+.prize.show{display:block;animation:pop .8s both}
+.prize h3{color:var(--a);font-size:1.6rem;margin-bottom:6px}
+.confetti{position:fixed;bottom:35%;z-index:9;font-size:1.6rem;pointer-events:none;animation:burst 2.2s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) rotate(540deg);opacity:0}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(8deg)}}
+
+.section{padding:80px 20px;max-width:960px;margin:auto;text-align:center}
+h2{font-size:clamp(1.8rem,5vw,2.6rem);margin-bottom:36px;color:var(--a)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+.card{position:relative;background:#ffffffcc;backdrop-filter:blur(8px);border-radius:24px;padding:34px 24px;box-shadow:0 10px 30px color-mix(in srgb,var(--b) 18%,transparent);transition:.4s}
+.card.show:hover{transform:translateY(-8px) rotate(-1deg)}
+.card .ico{font-size:3rem;margin-bottom:10px;animation:float 3s ease-in-out infinite}
+.card h3{font-size:1.3rem;margin-bottom:8px}
+.card p{font-weight:300;font-size:.95rem}
+.tag{position:absolute;top:16px;right:16px;background:var(--soft);color:#fff;font-size:.7rem;padding:4px 12px;border-radius:999px;font-weight:600}
+
+.steps{display:grid;gap:14px;max-width:520px;margin:auto;text-align:left}
+.step{display:flex;gap:16px;align-items:center;background:#fff;border-radius:20px;padding:16px 20px;box-shadow:0 8px 25px color-mix(in srgb,var(--a) 14%,transparent)}
+.step b{flex:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;display:grid;place-items:center}
+
+.countdown{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.countdown div{background:#fff;border-radius:18px;padding:18px 20px;min-width:80px;box-shadow:0 8px 25px color-mix(in srgb,var(--b) 20%,transparent)}
+.countdown b{display:block;font-size:2rem;color:var(--a)}
+.countdown span{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em}
+
+.info{display:grid;gap:16px;max-width:560px;margin:auto;text-align:left}
+.row{display:flex;gap:16px;align-items:center;background:#fff;border-radius:20px;padding:18px 22px;box-shadow:0 8px 25px color-mix(in srgb,var(--a) 12%,transparent)}
+.row .ico{font-size:1.8rem}
+.row small{display:block;color:var(--b);text-transform:uppercase;font-size:.7rem;letter-spacing:.15em}
+
+.contact p{margin-bottom:24px}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.contact .btn{animation:none}
+footer{text-align:center;padding:30px;font-size:.8rem;opacity:.6}
+
+.reveal{opacity:0;transform:translateY(40px) scale(.97);transition:opacity .8s,transform .8s}
+.reveal.show{opacity:1;transform:none}
+
+.info a.row{color:inherit;text-decoration:none;transition:.3s}
+.info a.row:hover{transform:translateY(-3px)}
+
+.gallery{max-width:1000px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.grid img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:22px;box-shadow:0 10px 30px color-mix(in srgb,var(--a) 25%,transparent)}
+.grid img.show:hover{transform:scale(1.04) rotate(-1deg)}
+@media(min-width:720px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.petals .balloon{top:auto;bottom:-80px;opacity:.9;animation:rise linear infinite}
+.petals .conf{position:absolute;top:-30px;border-radius:2px;animation:fall2 linear infinite}
+@keyframes rise{to{transform:translateY(-115vh) translateX(30px) rotate(12deg)}}
+@keyframes fall2{to{transform:translateY(112vh) rotate(720deg)}}
+
+.petals .star{position:absolute;color:var(--soft);opacity:0;animation:twinkle ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.95;transform:scale(1.2) rotate(40deg)}}
+.shoot{position:fixed;z-index:1;width:90px;height:2px;pointer-events:none;border-radius:2px;background:linear-gradient(90deg,transparent,var(--soft),#fff);transform:rotate(-35deg);animation:shoot 1.2s ease-out forwards}
+@keyframes shoot{from{opacity:1;transform:rotate(-35deg) translateX(0)}to{opacity:0;transform:rotate(-35deg) translateX(-420px)}}
+.spark{position:fixed;z-index:20;pointer-events:none;animation:spark .9s ease-out forwards}
+@keyframes spark{from{opacity:1;transform:translate(0,0) scale(1)}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2) rotate(180deg)}}
+.logo-wrap{position:relative}
+.logo-wrap::before{content:"";position:absolute;inset:-14px;border-radius:44px;border:2px solid var(--soft);opacity:.7;animation:ring 2.4s ease-out infinite}
+@keyframes ring{from{transform:scale(.9);opacity:.8}to{transform:scale(1.25);opacity:0}}
+.quote{max-width:680px;padding:50px 20px}
+.quote p{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.3rem,4.2vw,1.9rem);line-height:1.5;color:var(--a);position:relative;padding:0 10px}
+.quote p::before,.quote p::after{content:"✨";font-style:normal;font-size:1.2rem;margin:0 8px;animation:twinkle 2.4s infinite}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.3) rotate(-20deg)}to{opacity:1;transform:none}}
+@keyframes float{50%{transform:translateY(-10px)}}
+@keyframes pulse{50%{transform:scale(1.06)}}
+@keyframes shine{to{background-position:200%}}
+@keyframes bounce{50%{transform:translateY(8px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+.badge-btn{border:0;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px}
+.badge-btn small{font-size:.7rem;font-weight:300;opacity:.9}
+.badge-btn:hover{transform:scale(1.06)}
+.badge-btn.pressed{animation:pressed .75s ease both}
+@keyframes pressed{0%{transform:scale(1)}25%{transform:scale(.88) rotate(-6deg)}55%{transform:scale(1.25) rotate(6deg);box-shadow:0 0 60px var(--a)}100%{transform:scale(1) rotate(0)}}
+
+/* ===== Tarjetas con regalo (gratis y cumpleaños): fondo animado y regalo en movimiento ===== */
+:root[data-regalo] body{background:linear-gradient(120deg,var(--bg1),var(--bg2),var(--bg3),var(--soft),var(--bg1));background-size:400% 400%;animation:bgmove 16s ease infinite}
+@keyframes bgmove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+:root[data-regalo] body::before,:root[data-regalo] body::after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:50%;width:60vmax;height:60vmax}
+:root[data-regalo] body::before{top:-20vmax;left:-20vmax;background:radial-gradient(circle,color-mix(in srgb,var(--a) 28%,transparent),transparent 65%);animation:blob1 14s ease-in-out infinite alternate}
+:root[data-regalo] body::after{bottom:-22vmax;right:-22vmax;background:radial-gradient(circle,color-mix(in srgb,var(--b) 28%,transparent),transparent 65%);animation:blob2 18s ease-in-out infinite alternate}
+@keyframes blob1{to{transform:translate(35vw,25vh) scale(1.25)}}
+@keyframes blob2{to{transform:translate(-30vw,-30vh) scale(1.3)}}
+
+.gift{position:relative;isolation:isolate}
+.gift::before{content:"";position:absolute;z-index:-1;width:260px;height:260px;top:-80px;left:50%;margin-left:-130px;border-radius:50%;
+  background:repeating-conic-gradient(color-mix(in srgb,var(--soft) 55%,transparent) 0 10deg,transparent 10deg 30deg);
+  -webkit-mask-image:radial-gradient(circle,#000 25%,transparent 68%);mask-image:radial-gradient(circle,#000 25%,transparent 68%);animation:spin 10s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.prize{position:relative;overflow:hidden}
+.prize.show{animation:pop .8s both,float 4s .9s ease-in-out infinite,glow 2.4s ease-in-out infinite}
+.prize.show::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,#ffffffcc 50%,transparent 65%);transform:translateX(-120%);animation:sweep 3s 1s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 50px color-mix(in srgb,var(--a) 55%,transparent)}}
+@keyframes sweep{to{transform:translateX(120%)}}
+.btn.late{animation:up .8s both}

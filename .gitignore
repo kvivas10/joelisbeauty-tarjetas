@@ -1,0 +1,9 @@
+# Capturas de Netlify (contienen IDs y correo, no deben publicarse)
+img/netlify*.png
+img/Screenshot*
+# Originales sin renombrar (el sitio usa logo.jpg y foto2..7.jpg)
+img/WhatsApp Image*
+img/Logo Joelisbeauty.jpeg
+# Estado local de Netlify
+.netlify/
+node_modules/
