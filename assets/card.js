@@ -12,7 +12,9 @@
   const premio = (q.get("premio") || "").trim().slice(0, 90) || base.premioDefault || "un detalle sorpresa";
   const manual = (q.get("premio") || "").trim().slice(0, 90).replace(/[.\s]+$/, "");
   const regalo = manual || base.regaloDefault || "";
-  const fill = v => typeof v === "string" ? v.replace(/\{regalo\}/g, regalo).replace(/\{desc\}/g, desc).replace(/\{premio\}/g, premio).replace(/\{nombre\}/g, fmt || "Bella")
+  const deRaw = (q.get("de") || "").trim().slice(0, 40);
+  const de = (deRaw || "Joelis Beauty").replace(/\b\p{L}/gu, m => m.toUpperCase());          // remitente del regalo
+  const fill = v => typeof v === "string" ? v.replace(/\{de\}/g, de).replace(/\{regalo\}/g, regalo).replace(/\{desc\}/g, desc).replace(/\{premio\}/g, premio).replace(/\{nombre\}/g, fmt || "Bella")
     : Array.isArray(v) ? v.map(fill)
     : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fill(x)])) : v;
   const C = fill(base);
@@ -33,7 +35,7 @@
 
   const em = C.cumple ? "🎂" : C.ganadora ? "🏆" : "";
   const saludo = em
-    ? `${em} ${fmt ? esc(fmt) : "Para mi clienta preferida"} ${em}`
+    ? `${em} ${fmt ? esc(fmt) : esc(C.sinNombre || "Para mi clienta preferida")} ${em}`
     : (fmt ? `Hola, ${esc(fmt)} 💖` : "Para mi clienta preferida 💖");
 
   document.documentElement.dataset.tema = C.tema;
@@ -67,9 +69,10 @@
       onerror="this.style.display='none';document.getElementById('logoText').style.display='block'">
       <div id="logoText" class="logo-text" style="display:none">${esc(D.nombre)}</div></div>
     <p class="hola">${saludo}</p>
-    <p class="eyebrow">${esc(C.eyebrow)}</p>
+    ${C.carta ? `<div class="carta"><p>${esc(C.carta)}${C.cartaEmoji ? ` <span class="gf">${C.cartaEmoji}</span>` : ""}</p><span class="de">De parte de ${esc(de)} 💌</span></div>` : ""}
+    ${C.eyebrow ? `<p class="eyebrow">${esc(C.eyebrow)}</p>` : ""}
     <h1>${esc(C.titulo)}</h1>
-    <p class="sub">${esc(C.subtitulo)}</p>
+    ${C.subtitulo ? `<p class="sub">${esc(C.subtitulo)}</p>` : ""}
     ${heroExtra}
     ${R ? `<a class="btn late" id="verDetalle" href="#detalle" style="display:none">Ver detalles</a>` : C.ganadora ? `<a class="btn" href="#detalle">Ver detalles</a>` : ""}
     <div class="scroll-hint">desliza ↓</div>

@@ -32,10 +32,13 @@ button.g{background:#fff;color:#ff5fa2}
     <option value="sorteo">Sorteo</option>
     <option value="gratis">Gratis (regalo)</option>
     <option value="cumpleanos">Cumpleaños</option>
+    <option value="cumpleanos-personalizado">Cumpleaños personalizado</option>
     <option value="ganadora">Ganadora sorteo</option>
   </select>
   <label>Nombre de la clienta</label>
   <input id="n" placeholder="Ej: María" autocomplete="off">
+  <label>De parte de (solo cumpleaños personalizado)</label>
+  <input id="de" placeholder="Si lo dejas vacío: Joelis Beauty" autocomplete="off">
   <label>Descuento % (opcional)</label>
   <input id="p" placeholder="Ej: 40" inputmode="numeric" maxlength="2" pattern="[0-9]*">
   <label>Premio / regalo (opcional)</label>
@@ -53,12 +56,12 @@ button.g{background:#fff;color:#ff5fa2}
 const $=id=>document.getElementById(id);
 function link(){
   const u=new URL('modelos/'+$('m').value+'.html',location.href);
-  const n=$('n').value.trim(); if(n)u.searchParams.set('nombre',n);const p=$('p').value.replace(/\D/g,''),r=$('r').value.trim();if(p)u.searchParams.set('desc',p);if(r)u.searchParams.set('premio',r);const d=new Date();u.searchParams.set('d',d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
+  const n=$('n').value.trim(); if(n)u.searchParams.set('nombre',n);const p=$('p').value.replace(/\D/g,''),r=$('r').value.trim();if(p)u.searchParams.set('desc',p);const de=$('de').value.trim();if(de&&$('m').value==='cumpleanos-personalizado')u.searchParams.set('de',de);if(r)u.searchParams.set('premio',r);const d=new Date();u.searchParams.set('d',d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
   return u.href;
 }
 function up(){const l=link();$('o').textContent=l;$('v').href=l}
 $('p').addEventListener('input',()=>{$('p').value=$('p').value.replace(/\D/g,'').slice(0,2)});
-['m','n','p','r'].forEach(i=>$(i).addEventListener('input',up));up();
+['m','n','p','r','de'].forEach(i=>$(i).addEventListener('input',up));up();
 $('c').onclick=async()=>{await navigator.clipboard.writeText(link());$('c').textContent='¡Copiado! ✨';setTimeout(()=>$('c').textContent='Copiar enlace',1500)};
 $('w').onclick=()=>{
   const n=$('n').value.trim(),t=$('t').value.replace(/\D/g,'');
