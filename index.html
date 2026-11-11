@@ -19,6 +19,7 @@ input:focus,select:focus{outline:0;border-color:#ff5fa2}
 .btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
 button,a.b{flex:1;padding:13px;border-radius:999px;border:2px solid #ff5fa2;background:#ff5fa2;color:#fff;font:inherit;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;min-width:130px}
 button.g{background:#fff;color:#ff5fa2}
+.f[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -35,16 +36,26 @@ button.g{background:#fff;color:#ff5fa2}
     <option value="cumpleanos-personalizado">Cumpleaños personalizado</option>
     <option value="ganadora">Ganadora sorteo</option>
   </select>
-  <label>Nombre de la clienta</label>
-  <input id="n" placeholder="Ej: María" autocomplete="off">
-  <label>De parte de (solo cumpleaños personalizado)</label>
-  <input id="de" placeholder="Si lo dejas vacío: Joelis Beauty" autocomplete="off">
-  <label>Descuento % (opcional)</label>
-  <input id="p" placeholder="Ej: 40" inputmode="numeric" maxlength="2" pattern="[0-9]*">
-  <label>Premio / regalo (opcional)</label>
-  <input id="r" placeholder="Ej: Manicure semipermanente gratis" autocomplete="off">
-  <label>WhatsApp de la clienta (opcional)</label>
-  <input id="t" placeholder="573001112233" inputmode="numeric">
+  <div class="f" id="f-n">
+    <label>Nombre de la clienta</label>
+    <input id="n" placeholder="Ej: María" autocomplete="off">
+  </div>
+  <div class="f" id="f-de">
+    <label>De parte de (remitente)</label>
+    <input id="de" placeholder="Si lo dejas vacío: Joelis Beauty" autocomplete="off">
+  </div>
+  <div class="f" id="f-p">
+    <label>Descuento %</label>
+    <input id="p" placeholder="" inputmode="numeric" maxlength="2" pattern="[0-9]*">
+  </div>
+  <div class="f" id="f-r">
+    <label id="lr">Premio / regalo</label>
+    <input id="r" placeholder="" autocomplete="off">
+  </div>
+  <div class="f" id="f-t">
+    <label>WhatsApp de la clienta (opcional)</label>
+    <input id="t" placeholder="573001112233" inputmode="numeric">
+  </div>
   <div class="out" id="o"></div>
   <div class="btns">
     <button id="c">Copiar enlace</button>
@@ -54,18 +65,42 @@ button.g{background:#fff;color:#ff5fa2}
 </div>
 <script>
 const $=id=>document.getElementById(id);
+/* Campos que aplican a cada tarjeta (n=nombre, de=remitente, p=descuento %, r=premio/regalo) */
+const CAMPOS={
+  'promocion':{n:1,p:'Si lo dejas vacío: 20%'},
+  'descuento':{n:1,p:'Si lo dejas vacío: 20%'},
+  'sorteo':{n:1,r:['Premio mayor del sorteo','Si lo dejas vacío: Set de uñas con diseño a tu elección']},
+  'gratis':{n:1,r:['Regalo','Si lo dejas vacío: Tu próximo arreglo de uñas es totalmente GRATIS 💖']},
+  'cumpleanos':{n:1,p:'Si lo dejas vacío: 20%',r:['Regalo (reemplaza el descuento)','Ej: Mantenimiento Gel + pedicura semi']},
+  'cumpleanos-personalizado':{n:1,de:1,p:'Si lo dejas vacío: 20%',r:['Regalo (reemplaza el descuento)','Ej: Mantenimiento Gel + pedicura semi']},
+  'ganadora':{n:1,r:['Premio ganado','Si lo dejas vacío: Set de uñas con diseño a tu elección']}
+};
+const cur=()=>CAMPOS[$('m').value];
+function campos(){
+  const c=cur();
+  $('f-n').hidden=!c.n; $('f-de').hidden=!c.de; $('f-p').hidden=!c.p; $('f-r').hidden=!c.r;
+  if(c.p)$('p').placeholder=c.p;
+  if(c.r){$('lr').textContent=c.r[0];$('r').placeholder=c.r[1];}
+}
 function link(){
-  const u=new URL('modelos/'+$('m').value+'.html',location.href);
-  const n=$('n').value.trim(); if(n)u.searchParams.set('nombre',n);const p=$('p').value.replace(/\D/g,''),r=$('r').value.trim();if(p)u.searchParams.set('desc',p);const de=$('de').value.trim();if(de&&$('m').value==='cumpleanos-personalizado')u.searchParams.set('de',de);if(r)u.searchParams.set('premio',r);const d=new Date();u.searchParams.set('d',d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
+  const c=cur(), u=new URL('modelos/'+$('m').value+'.html',location.href);
+  const n=$('n').value.trim(), de=$('de').value.trim(), p=$('p').value.replace(/D/g,'').slice(0,2), r=$('r').value.trim();
+  if(c.n&&n)u.searchParams.set('nombre',n);
+  if(c.de&&de)u.searchParams.set('de',de);
+  if(c.p&&p)u.searchParams.set('desc',p);
+  if(c.r&&r)u.searchParams.set('premio',r);
+  const d=new Date();
+  u.searchParams.set('d',d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
   return u.href;
 }
-function up(){const l=link();$('o').textContent=l;$('v').href=l}
-$('p').addEventListener('input',()=>{$('p').value=$('p').value.replace(/\D/g,'').slice(0,2)});
+function up(){campos();const l=link();$('o').textContent=l;$('v').href=l}
+$('p').addEventListener('input',()=>{$('p').value=$('p').value.replace(/D/g,'').slice(0,2)});
 ['m','n','p','r','de'].forEach(i=>$(i).addEventListener('input',up));up();
 $('c').onclick=async()=>{await navigator.clipboard.writeText(link());$('c').textContent='¡Copiado! ✨';setTimeout(()=>$('c').textContent='Copiar enlace',1500)};
 $('w').onclick=()=>{
-  const n=$('n').value.trim(),t=$('t').value.replace(/\D/g,'');
-  const msg=encodeURIComponent(`Hola ${n||''} 💖 Tenemos algo especial para ti en Joelis Beauty:\n${link()}`);
+  const n=cur().n?$('n').value.trim():'',t=$('t').value.replace(/D/g,'');
+  const msg=encodeURIComponent(`Hola ${n} 💖 Tenemos algo especial para ti en Joelis Beauty:
+${link()}`);
   window.open(t?`https://wa.me/${t}?text=${msg}`:`https://wa.me/?text=${msg}`,'_blank');
 };
 </script>
